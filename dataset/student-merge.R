@@ -80,7 +80,30 @@ dataAnova$MoyClass <- MoyClass
 
 plot(density(dataAnova$Moy))
 
+#essai 1
+
 ggplot(dataAnova) + aes(x = Dalc, y = Walc, color=MoyClass) +
+  labs(title = "Notes Moyennes en fonction de la consommation d'alcool", 
+       x="Consommation Quotidienne", 
+       y="Consommation le Week-end") +
   #theme_tufte()+
-  geom_jitter(size=0.4, alpha=0.8)+
-  scale_fill_manual(values = wesanderson::wes_palette('Darjeeling1'))
+  geom_jitter(size=0.8, alpha=0.8, width = 0.15)+
+  scale_color_manual(values = c("#E53C0E", "#E9CB0D", "#9CDE3B", "#16A069"),
+                     breaks = c("0-5", "5-10", "10-15", "15-20")
+                     ) +
+  theme_light()+
+  theme_minimal()
+  
+# essai 2: 
+
+ggplot(dataAnova) + aes(x = Dalc, y = Walc, color=MoyClass) +
+  labs(title = "Notes Moyennes en fonction de la consommation d'alcool", 
+       x="Consommation Quotidienne", 
+       y="Consommation le Week-end") +
+  #theme_tufte()+
+  geom_jitter(size=0.8, alpha=0.8, width = 0.15)+
+  scale_color_manual(values = c("#E53C0E", "#E9CB0D", "#9CDE3B", "#16A069"),
+                     breaks = c("0-5", "5-10", "10-15", "15-20")
+  ) +
+  theme_light()+
+  theme_minimal()
