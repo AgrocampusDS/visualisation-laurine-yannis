@@ -78,6 +78,14 @@ MoyClass <- apply(dataAnova, MARGIN = 1, FUN= function(x){
 
 dataAnova$MoyClass <- MoyClass
 
+## Modification tidyverse
+library(tidyverse)
+
+dataAlcClass <- dataAnova %>% 
+  group_by(MoyClass, Walc, Dalc) %>% 
+  mutate(agregation  = n()) %>% 
+  distinct(agregation)
+
 plot(density(dataAnova$Moy))
 
 #essai 1
@@ -101,9 +109,39 @@ ggplot(dataAnova) + aes(x = Dalc, y = Walc, color=MoyClass) +
        x="Consommation Quotidienne", 
        y="Consommation le Week-end") +
   #theme_tufte()+
-  geom_jitter(size=0.8, alpha=0.8, width = 0.15)+
+  geom_jitter(aes(col=MoyClass))+
+  geom_point(size=0.8, alpha=0.8)+
   scale_color_manual(values = c("#E53C0E", "#E9CB0D", "#9CDE3B", "#16A069"),
                      breaks = c("0-5", "5-10", "10-15", "15-20")
   ) +
   theme_light()+
   theme_minimal()
+
+plot(density(dataAlcClass$agregation))
+
+# essai 3 
+ggplot(dataAlcClass) + aes(x = Dalc, y = Walc, color=MoyClass) +
+  labs(title = "Notes Moyennes en fonction de la consommation d'alcool", 
+       x="Consommation Quotidienne", 
+       y="Consommation le Week-end") +
+  #theme_tufte()+
+  geom_jitter(aes(col=MoyClass, size = agregation), width = 0.2, height = 0.2)+
+  #scale_size_manual(values = c(1, 2, 3, 4)) +
+  scale_color_manual(values = c("#E53C0E", "#E9CB0D", "#9CDE3B", "#16A069"),
+                     breaks = c("0-5", "5-10", "10-15", "15-20")
+  ) +
+  theme_light()+
+  theme_minimal()
+
+# sans classe : 
+
+ggplot(dataAnova) + aes(x = Dalc, y = Walc) +
+  labs(title = "Notes Moyennes en fonction de la consommation d'alcool", 
+       x="Consommation Quotidienne", 
+       y="Consommation le Week-end") +
+  geom_jitter( width = 0.2, height = 0.4)+
+  theme_light()+
+  theme_minimal()
+
+
+
