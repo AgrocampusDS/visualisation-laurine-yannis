@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 #html
 flexdashboard.html
+
+#files lock 
+dataset/.~lock.HDI.csv#
