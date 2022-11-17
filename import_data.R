@@ -29,7 +29,19 @@ data[data$Country == "Korea (Republic of)", "Country"] <- "Republic of Korea"
 
 complete_data <- world %>% rename(Country = name_long) %>% inner_join(data, by="Country")
 
-complete_data %>% ggplot() + geom_sf(aes(fill=HDI))
+complete_data %>% ggplot() + 
+  geom_sf(aes(fill=HDI))  +
+  scale_fill_gradient(low="red", high="blue")
 
+## Focus on africa
+
+africa_data <- complete_data %>% filter(continent == "Africa")
+africa_data %>% ggplot() + 
+  geom_sf(aes(fill=HDI))  +
+  scale_fill_gradient(low="red", high="blue") +
+  theme_tufte() +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
 
 
