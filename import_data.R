@@ -12,6 +12,8 @@ data2 <- merge(data, countries_coordinates, by="Country")
 
 library('tidyverse')
 library('ggplot2')
+library("ggthemes")
+library("gridExtra")
 library("sf")
 library("rnaturalearth")
 library("rnaturalearthdata")
@@ -73,7 +75,7 @@ meanClass <- apply(africa_data, MARGIN = 1, FUN= function(x){
 
 africa_data$meanClass <- meanClass
 
-africa_data %>%  ggplot() + 
+map <- africa_data %>%  ggplot() + 
   geom_sf(aes(fill=Life.expectancy)) +
   scale_fill_gradientn("Espérance de vie", colors=c("#DFD0BD", "#5B4A54")) +
   
@@ -98,3 +100,30 @@ africa_data %>% rename(Agriculture = Employment.in.agriculture....of.total.emplo
   theme(axis.line = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank())
+
+# test multiple plots 
+t <- function(title, bgcolor){
+  #fonction pour créer un titre custom
+  return(ggplot() +                      # Draw ggplot2 plot with text only
+           annotate("text",
+                    x = 1,
+                    y = 0,
+                    size = 4,
+                    label = title,
+                    colour="black") + 
+           theme_void()+
+           theme(plot.background = element_rect(fill=bgcolor, color=bgcolor))
+  )
+}
+
+test <- t('Titre', "white")
+
+l <- list(map, test)
+
+grid.arrange(
+  grobs = l,
+  widths = c(3),
+  heights = c(3, 1),
+  layout_matrix = rbind(c(1),
+                        c(2))
+)
