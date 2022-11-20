@@ -1,6 +1,6 @@
 ---
-title: "Un joli titre pour le dashboard"
-author: "Marie-Pierre Etienne"
+title: "Insuffisance de l'IDH"
+author: "Laurine KOMENDANCZYK & Yannis BARBA"
 output: 
   flexdashboard::flex_dashboard:
     theme: bootstrap
@@ -28,10 +28,16 @@ color:black!important;
 
 
 ```{r setup, include=FALSE}
-library(flexdashboard)
-library(tidyverse)
-library(ggplot2)
-library(plotly)
+library('flexdashboard')
+library('plotly')
+library('tidyverse')
+library('ggplot2')
+library("ggthemes")
+library("gridExtra")
+library("sf")
+library("rnaturalearth")
+library("rnaturalearthdata")
+library("ggnewscale")
 ```
 
 Column {data-width=650}
@@ -46,36 +52,79 @@ Column {data-width=650}
 
 The [flexdashboard website](https://rmarkdown.rstudio.com/flexdashboard/index.html) provides multiple advanced examples.
 
-### Some static graph
+```{r}
+data <- read.csv("./dataset/HDI.csv", sep=",", header = TRUE)
+world <- ne_countries(scale = "medium", returnclass = "sf")
 
-```{r data, eval = TRUE, echo = FALSE, results='hide', message = FALSE, warning=FALSE}
-n <- 100
-dta <- tibble(size = round(rnorm(n, mean = 0, sd =10),2), 
-           color = sample(x= c('Blue', 'Yellow'), size = n, replace = TRUE))
+## Data pre-processing : rename of certain value
+data[data$Country == "Congo (Democratic Republic of the)", "Country"] <- "Democratic Republic of the Congo"
+data[data$Country == "Congo", "Country"] <- "Republic of Congo"
+data[data$Country == "Tanzania (United Republic of)", "Country"] <- "Tanzania"
+data[data$Country == "Bolivia (Plurinational State of)", "Country"] <- "Bolivia"
+data[data$Country == "Korea (Republic of)", "Country"] <- "Republic of Korea" 
 
+complete_data <- world %>% rename(Country = name_long) %>% inner_join(data, by="Country")
+
+## Focus on africa
+
+africa_data <- complete_data %>% filter(continent == "Africa")
+
+## extract centroid 
+sf_use_s2(FALSE)
+countries_centroid <- st_centroid(africa_data$geometry)
+
+africa_data <- cbind(africa_data, centroid = st_centroid(africa_data$geometry))
 ```
 
+### First Graph
 
-```{r graph_static,  echo = FALSE,  message = FALSE, warning=FALSE}
-p1 <- dta %>% ggplot() +
-  aes(x=color, y = size) +
-  geom_boxplot(aes(fill= color))
-p1
+```{r}
+# Plot first Map, Africa HDI and School
+map_HDI_School <- africa_data %>%  ggplot() + 
+  #labs(title="Les limites de l'IDH",
+   #       subtitle = "Absence de prise en compte des inégalités") +
+  
+  geom_sf(aes(fill=HDI)) +
+  scale_fill_gradientn("IDH", colors=c("#DFD0BD", "#5B4A54")) +
+
+  geom_sf(aes(geometry = geometry.1, size=Inequality.in.income....)) +
+
+  scale_color_manual("Classes IDH", values=c("#E64814", "#E9CB0D", "#9CDE3B"), 
+                     breaks=c("1", "2", "3"), labels=c("Bas", "Moyen", "Élevé")) +
+
+  scale_size(name="Inégalité d'income") +
+  theme_tufte() +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) +
+  guides(fill = guide_colourbar(order=1),
+         color = guide_legend(order=2),
+         size = guide_legend(order=3))
+
+map_HDI_School
 ```
 
 Column {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 
-### Some dynamic maps
+### Second Graph
 
 ```{r  ggplotly, echo = TRUE,  eval = TRUE,  message = FALSE, warning=FALSE}
-plotly::ggplotly(p1)
+africa_data$RatioIDHI_IDH <- africa_data$Inequality.adjusted.HDI..IHDI. / africa_data$HDI
+
+ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>% 
+  ggplot(aes(x = reorder(Country, HDI), y=RatioIDHI_IDH)) +
+  geom_col(width = 0.9)+
+  theme_light()+
+  theme(axis.text.x = element_text(angle = 50, hjust=1))
+
+ratio_graph
 ```
 
 
 
-### Chart C
+### Third Graph
 
 ```{r}
 
