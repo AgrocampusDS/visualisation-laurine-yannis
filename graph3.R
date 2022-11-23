@@ -97,6 +97,13 @@ min.max = data.frame(rbind (c(1,1,1), c(0,0,0)))
 names(min.max) <- c("Life expectancy", "Education", "Income")
 dta.Niger.fmsb <- rbind(data.frame(), min.max, dta.Niger.fmsb)
 
+dta.RSA.fmsb <- dta.RSA[-1]
+names(dta.RSA.fmsb) <- c("Life expectancy", "Education", "Income")
+min.max = data.frame(rbind (c(1,1,1), c(0,0,0)))
+names(min.max) <- c("Life expectancy", "Education", "Income")
+dta.RSA.fmsb <- rbind(data.frame(), min.max, dta.RSA.fmsb)
+
+
 
 data.frame (c(1,1,1), c(2,2,2))
 
@@ -113,12 +120,45 @@ radarchart(dta.Niger.fmsb,
            pfcol = areas, 
            title = "Décomposition des indicateurs IDH et IDHI du Niger", 
            maxmin = TRUE, 
-           paxislab = 1:5, 
-           seg = 5,
-           axislabcol = "grey")
+           paxislab = 1:5,
+           seg = 4,
+           axislabcol = "grey", 
+           axistype = 4, 
+           caxislabels = c("0.0","0.25", "0.50", "0.75","1.0"))
 
 legend("topright",
        legend = c("HDI", "IHDI"),
        bty = "n", pch = 20, col = areas,
        text.col = "grey25", pt.cex = 2)
 
+
+# RSA
+radarchart(dta.RSA.fmsb, 
+           cglty = 1,       # Grid line type
+           cglcol = "gray", # Grid line color
+           pcol = c(2,4),   # Color for each line
+           plwd = 2,        # Width for each line
+           plty = 1,        # Line type for each line
+           pfcol = areas, 
+           title = "Décomposition des indicateurs IDH et IDHI du Niger", 
+           maxmin = TRUE, 
+           paxislab = 1:5,
+           seg = 4,
+           axislabcol = "grey", 
+           axistype = 4, 
+           caxislabels = c("0.0","0.25", "0.50", "0.75","1.0"))
+
+legend("topright",
+       legend = c("HDI", "IHDI"),
+       bty = "n", pch = 20, col = areas,
+       text.col = "grey25", pt.cex = 2)
+
+
+# radarchart(dat, 
+#            axistype=1,
+#            seg=5, 
+#            plty=1, 
+#            vlabels=c("Total\nQOL", "Physical\naspects", 
+#                      "Phychological\naspects", "Social\naspects", "Environmental\naspects"), 
+#            title="(axis=1, 5 segments, with specified vlabels)", 
+#            vlcex=0.5)
