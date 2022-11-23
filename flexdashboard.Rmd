@@ -1,5 +1,5 @@
 ---
-title: "Insuffisance de l'IDH"
+title: "Nécessité de détailler l'IDH"
 author: "Laurine KOMENDANCZYK & Yannis BARBA"
 output: 
   flexdashboard::flex_dashboard:
@@ -76,6 +76,31 @@ countries_centroid <- st_centroid(africa_data$geometry)
 africa_data <- cbind(africa_data, centroid = st_centroid(africa_data$geometry))
 ```
 
+```{r}
+# create HDI class for a better representation
+africa_data <- africa_data %>% drop_na(HDI)
+HDISummary <- summary(africa_data$HDI)
+
+HDIClass <- apply(africa_data, MARGIN = 1, FUN= function(x){
+  
+  if(as.numeric(x["HDI"]) <= HDISummary["1st Qu."]){
+    return("TB")
+  }
+  if((as.numeric(x["HDI"]) > HDISummary["1st Qu."]) && (as.numeric(x["HDI"]) <=HDISummary["Median"])){
+    return("B")
+  }
+  if((as.numeric(x["HDI"]) > HDISummary["Median"]) && (as.numeric(x["HDI"]) <=HDISummary["3rd Qu."])){
+    return("M")
+  }
+  if(as.numeric(x["HDI"]) > HDISummary["3rd Qu."]){
+    return("E")
+  }
+})
+
+africa_data$HDIClass <- HDIClass
+```
+
+
 ### First Graph
 
 ```{r}
@@ -87,10 +112,10 @@ map_HDI_School <- africa_data %>%  ggplot() +
   geom_sf(aes(fill=HDI)) +
   scale_fill_gradientn("IDH", colors=c("#DFD0BD", "#5B4A54")) +
 
-  geom_sf(aes(geometry = geometry.1, size=Inequality.in.income....)) +
+  geom_sf(aes(geometry = geometry.1, color=HDIClass , size=Inequality.in.income....)) +
 
-  scale_color_manual("Classes IDH", values=c("#E64814", "#E9CB0D", "#9CDE3B"), 
-                     breaks=c("1", "2", "3"), labels=c("Bas", "Moyen", "Élevé")) +
+  scale_color_manual("Classes IDH", values=c("black", "#E64814", "#E9CB0D", "#9CDE3B"), 
+                     breaks=c("TB", "B", "M", "E"), labels=c("Très Bas", "Bas", "Moyen", "Élevé")) +
 
   scale_size(name="Inégalité d'income") +
   theme_tufte() +
@@ -110,14 +135,45 @@ Column {.tabset .tabset-fade}
 
 ### Second Graph
 
-```{r  ggplotly, echo = TRUE,  eval = TRUE,  message = FALSE, warning=FALSE}
+```{r}
 africa_data$RatioIDHI_IDH <- africa_data$Inequality.adjusted.HDI..IHDI. / africa_data$HDI
 
+country <- africa_data$Country
+highlightCountries <- rep(0, length(country))
+
+highlightCountries[which(country=="South Africa")] <- data.frame(africa_data[which(country=="South Africa"),"RatioIDHI_IDH"])[-2][1,1]
+
+highlightCountries[which(country=="Niger")] <- data.frame(africa_data[which(country=="Niger"),"RatioIDHI_IDH"])[-2][1,1]
+
 ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>% 
-  ggplot(aes(x = reorder(Country, HDI), y=RatioIDHI_IDH)) +
-  geom_col(width = 0.9)+
+  
+  ggplot() +
+  
+  # annotate("rect",
+  #          xmin = Inf, xmax = 0, ymin = Inf, ymax = 0,
+  #          fill=rgb(255, 204, 200,maxColorValue=255)) +
+  geom_col(aes(y=reorder(Country, RatioIDHI_IDH), x=RatioIDHI_IDH, fill=HDIClass), width = 0.95) +
+  scale_fill_manual("Classes IDH", values=c("#9CDE3B","#E9CB0D", "#E64814","black"),
+                     breaks=c("E", "M", "B","TB"), labels=c("Élevé", "Moyen", "Bas","Très Bas"))+
+
+  
+  #geom_point(aes(x = reorder(Country, HDI), y=HDI, fill=HDIClass), width = 0.95) +
+  
+  # geom_col(data = data.frame(IHDI = africa_data$Inequality.adjusted.HDI..IHDI.,
+  #                            Country=africa_data$Country, HDI=africa_data$HDI),
+  #          aes(x=reorder(Country, HDI), y=IHDI), fill="darkred", width = 1) +
+  
+  labs(x="IHDI/HDI", y =element_blank()) +
+  
   theme_light()+
-  theme(axis.text.x = element_text(angle = 50, hjust=1))
+  theme(axis.text.x = element_text(hjust=1),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_line(color = "grey",
+                                  size = 0.2,
+                                  linetype = 1),
+        panel.border = element_blank()
+        ) +
+  scale_x_continuous(breaks = seq(0,1, 0.1), limits = c(0,1))
 
 ratio_graph
 ```
