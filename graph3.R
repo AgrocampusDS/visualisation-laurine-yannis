@@ -42,7 +42,7 @@ dta.hdi <- data.frame(africa_data[,c("Life.expectancy",
                                      "Inequality.adjusted.life.expectancy.index", 
                                      "Inequality.adjusted.education.index",
                                      "Inequality.adjusted.income.index")])[,-7]
-rownames(dta.hdi) <- africa_data$Gross.national.income..GNI..per.capita
+rownames(dta.hdi) <- africa_data$sovereignt
 dta.hdi <- dta.hdi[c(33, 46),]
 
 dta.hdi <- data.frame(c(dta.hdi, 
@@ -93,13 +93,13 @@ library(fmsb)
 
 dta.Niger.fmsb <- dta.Niger[-1]
 names(dta.Niger.fmsb) <- c("Life expectancy", "Education", "Income")
-min.max = data.frame(rbind (c(1,1,1), c(0,0,0)))
+min.max = data.frame(rbind (c(0.75,0.75,0.75), c(0,0,0)))
 names(min.max) <- c("Life expectancy", "Education", "Income")
 dta.Niger.fmsb <- rbind(data.frame(), min.max, dta.Niger.fmsb)
 
 dta.RSA.fmsb <- dta.RSA[-1]
 names(dta.RSA.fmsb) <- c("Life expectancy", "Education", "Income")
-min.max = data.frame(rbind (c(1,1,1), c(0,0,0)))
+min.max = data.frame(rbind (c(0.75,0.75,0.75), c(0,0,0)))
 names(min.max) <- c("Life expectancy", "Education", "Income")
 dta.RSA.fmsb <- rbind(data.frame(), min.max, dta.RSA.fmsb)
 
@@ -121,10 +121,10 @@ radarchart(dta.Niger.fmsb,
            title = "Décomposition des indicateurs IDH et IDHI du Niger", 
            maxmin = TRUE, 
            paxislab = 1:5,
-           seg = 4,
+           seg = 3,
            axislabcol = "grey", 
-           axistype = 4, 
-           caxislabels = c("0.0","0.25", "0.50", "0.75","1.0"))
+           axistype = 3)
+           # caxislabels = c("0.5","0.75"))
 
 legend("topright",
        legend = c("HDI", "IHDI"),
@@ -143,7 +143,7 @@ radarchart(dta.RSA.fmsb,
            title = "Décomposition des indicateurs IDH et IDHI du Niger", 
            maxmin = TRUE, 
            paxislab = 1:5,
-           seg = 4,
+           seg = 3,
            axislabcol = "grey", 
            axistype = 4, 
            caxislabels = c("0.0","0.25", "0.50", "0.75","1.0"))

@@ -73,7 +73,23 @@ africa_data <- complete_data %>% filter(continent == "Africa")
 sf_use_s2(FALSE)
 countries_centroid <- st_centroid(africa_data$geometry)
 
-africa_data <- cbind(africa_data, centroid = st_centroid(africa_data$geometry))
+africa_data <- cbind(africa_data, centroid = st_centroid(africa_data$geometry)) 
+
+# computation of the indexes composing hdi
+dta.hdi <- data.frame(africa_data[,c("Life.expectancy", 
+                                     "Mean.years.of.schooling",
+                                     "Gross.national.income..GNI..per.capita", 
+                                     "Inequality.adjusted.life.expectancy.index", 
+                                     "Inequality.adjusted.education.index",
+                                     "Inequality.adjusted.income.index")])[,-7]
+
+dta.hdi <- data.frame(c(dta.hdi, 
+                        IESP = (dta.hdi[1] - 25)/(85 - 25),
+                        INI = dta.hdi[2]/15, 
+                        IPIB = (log(dta.hdi[3])-log(100)) /(log(40000) -log(100))))
+
+rownames(dta.hdi) <- africa_data$sovereignt
+
 ```
 
 ```{r}
@@ -110,23 +126,49 @@ map_HDI_School <- africa_data %>%  ggplot() +
    #       subtitle = "Absence de prise en compte des inégalités") +
   
   geom_sf(aes(fill=HDI)) +
-  scale_fill_gradientn("IDH", colors=c("#DFD0BD", "#5B4A54")) +
+  scale_fill_gradientn("IDH", colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B")) +
 
-  geom_sf(aes(geometry = geometry.1, color=HDIClass , size=Inequality.in.income....)) +
+  #geom_sf(aes(geometry = geometry.1, color=HDIClass , size=Inequality.in.income....)) +
 
-  scale_color_manual("Classes IDH", values=c("black", "#E64814", "#E9CB0D", "#9CDE3B"), 
-                     breaks=c("TB", "B", "M", "E"), labels=c("Très Bas", "Bas", "Moyen", "Élevé")) +
+  #scale_color_manual("Classes IDH", values=c("black", "#E64814", "#E9CB0D", "#9CDE3B"), 
+   #                  breaks=c("TB", "B", "M", "E"), labels=c("Très Bas", "Bas", "Moyen",     "Élevé")) +
 
   scale_size(name="Inégalité d'income") +
   theme_tufte() +
   theme(axis.line = element_blank(),
         axis.text = element_blank(),
-        axis.ticks = element_blank()) +
-  guides(fill = guide_colourbar(order=1),
-         color = guide_legend(order=2),
-         size = guide_legend(order=3))
+        axis.ticks = element_blank())
+  #guides(fill = guide_colourbar(order=1),
+         # color = guide_legend(order=2),
+         # size = guide_legend(order=3))
 
 map_HDI_School
+
+
+## second part of the first grahp : component of HDI
+
+niger <- dta.hdi["Niger",]
+southAfrica <- dta.hdi["South Africa",]
+
+hist.Niger <- data.frame(t(niger)[7:9,])
+hist.RSA <- data.frame(t(southAfrica)[7:9,])
+
+colnames(hist.Niger) = c("value")
+colnames(hist.RSA) = c("value")
+
+indexes = rownames(histoHDI)
+
+histoHDI <- data.frame(index = c("IESP", "INI", "IPIB","IESP", "INI", "IPIB"), 
+                       rbind(hist.Niger, hist.RSA))
+
+histoHDI <- data.frame(histoHDI,
+                       Country = c(rep("Niger",3), rep("South Africa", 3)))
+                       
+colnames(histoHDI) <- c("index", "values", "Country")
+
+histoHDI %>% ggplot(aes(y = values, x=index, fill = Country)) +
+  geom_col() +
+  facet_wrap(~Country)
 ```
 
 Column {.tabset .tabset-fade}
@@ -136,6 +178,30 @@ Column {.tabset .tabset-fade}
 ### Second Graph
 
 ```{r}
+# Plot first Map, Africa HDI and School
+map_IHDI <- africa_data %>%  ggplot() + 
+  #labs(title="Les limites de l'IDH",
+   #       subtitle = "Absence de prise en compte des inégalités") +
+  
+  geom_sf(aes(fill=Inequality.adjusted.HDI..IHDI.)) +
+  scale_fill_gradientn("IDH", colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B")) +
+
+  #geom_sf(aes(geometry = geometry.1, color=HDIClass , size=Inequality.in.income....)) +
+
+  #scale_color_manual("Classes IDH", values=c("black", "#E64814", "#E9CB0D", "#9CDE3B"), 
+   #                  breaks=c("TB", "B", "M", "E"), labels=c("Très Bas", "Bas", "Moyen",     "Élevé")) +
+
+  scale_size(name="IHDI") +
+  theme_tufte() +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+  #guides(fill = guide_colourbar(order=1),
+         # color = guide_legend(order=2),
+         # size = guide_legend(order=3))
+
+map_IHDI
+
 africa_data$RatioIDHI_IDH <- africa_data$Inequality.adjusted.HDI..IHDI. / africa_data$HDI
 
 country <- africa_data$Country
