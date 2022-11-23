@@ -38,6 +38,7 @@ library("sf")
 library("rnaturalearth")
 library("rnaturalearthdata")
 library("ggnewscale")
+library("fmsb")
 ```
 
 Column {data-width=650}
@@ -82,6 +83,7 @@ dta.hdi <- data.frame(c(dta.hdi,
 rownames(dta.hdi) <- africa_data$sovereignt
 
 ```
+
 ```{r}
 ## Utils
 
@@ -190,7 +192,15 @@ colnames(histoHDI) <- c("index", "values", "Country")
 annotation <- data.frame(
    label=c("HDI: 0.35", "HDI: 0.67", "HDI: 0.35", "HDI: 0.65"),
    Country=c("Niger", "South Africa", "Central African Republic", "Morocco"),
-   hjust=c(0, -0.2, 0, 0.2)
+   hjust=c(0, -0.1, 0, 0.1)
+)
+
+rect <- data.frame(
+  xmin = rep(0.5, 4),
+  xmax = rep(3.5, 4),
+  ymin = rep(-Inf, 4),
+  ymax = rep(Inf, 4),
+  fill=factor(c("black", "blue", "black", "blue"))
 )
 
 histo <- histoHDI %>% ggplot() +
@@ -201,6 +211,17 @@ histo <- histoHDI %>% ggplot() +
             mapping = aes(x = 2, y=0.8, label=label),
             size=4,
             )+
+  
+  geom_rect(data=rect,
+            mapping = aes(xmin = xmin, 
+                          xmax=xmax, 
+                          ymin=ymin, 
+                          ymax=ymax,
+                          #fill=fill
+                          ),
+            #fill="blue",
+            alpha=0.1,
+            color=NA)+
 
   theme_tufte() +
   theme(legend.position = "None",
@@ -229,7 +250,7 @@ Column {.tabset .tabset-fade}
 # Plot first Map, Africa HDI and School
 map_IHDI <- africa_data %>%  ggplot() + 
   geom_sf(aes(fill=Inequality.adjusted.HDI..IHDI.)) +
-  scale_fill_gradientn("IDH", colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B"),
+  scale_fill_gradientn("IHDI", colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B"),
                        limits = limits) +
 
   scale_size(name="IHDI") +
@@ -253,10 +274,19 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
   
   ggplot() +
   geom_col(aes(y=reorder(Country, RatioIDHI_IDH), x=RatioIDHI_IDH, fill=HDIClass), width = 0.95) +
-  scale_fill_manual("Classes IDH", values=c("#9CDE3B","#E9CB0D", "#E64814","black"),
+  scale_fill_manual("Classes IDH", values=c("#9CDE3B","#EAC60E", "#EA7513","#BE3E14"),
                      breaks=c("E", "M", "B","TB"), labels=c("Élevé", "Moyen", "Bas","Très Bas"))+
   
-  labs(x="IHDI/HDI", y =element_blank()) +
+  labs(x="Ratio IHDI/HDI", y =element_blank()) +
+  geom_vline(xintercept =1, color="#9CDE3B")+
+  
+  geom_rect(xmin=-Inf, xmax=Inf, ymin=37, ymax=42.5, color="black", alpha=0, size=0.1) +
+  geom_text(x = 1.5, y = 40, size=3,
+    label="Ratio élevé : \n IDH peu pénalisé") +
+  
+  geom_rect(xmin=-Inf, xmax=Inf, ymin=0, ymax=5, color="black", alpha=0, size=0.1) +
+  geom_text(x = 1.5, y = 2.5, size=3,
+    label="Ratio faible : \n IDH très pénalisé") +
   
   theme_light()+
   theme(axis.text.x = element_text(hjust=1),
@@ -265,11 +295,10 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
         panel.grid.minor = element_line(color = "grey",
                                   size = 0.2,
                                   linetype = 1),
-        panel.border = element_blank(),
-        legend.position = "None",
+        panel.border = element_blank()
         ) +
-  scale_x_continuous(breaks = seq(0,1, 0.1), limits = c(0,1))
-  #scale_y_discrete(position = "right")
+  scale_x_continuous(breaks = seq(0,1, 0.1), limits = c(0,1))+
+  coord_cartesian(clip = "off")
 
 #ratio_graph
 
@@ -277,7 +306,7 @@ grid.arrange(
   grobs=list(map_IHDI, ratio_graph),
   widths=c(1,1),
   #layout_matrix = rbind(c(1,1))
-  bottom="Indice de développement humain en Afrique \n la valeur de l'IDH seule est insuffisante pour caractériser un pays"
+  bottom="Indice de développement humain ajusté aux inégalités"
 )
 ```
 
