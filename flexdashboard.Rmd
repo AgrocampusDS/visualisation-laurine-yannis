@@ -91,6 +91,24 @@ dta.hdi <- data.frame(c(dta.hdi,
 rownames(dta.hdi) <- africa_data$sovereignt
 
 ```
+```{r}
+## Utils
+
+mainTitle <- function(title, bgcolor){
+  return(ggplot() +                      # Draw ggplot2 plot with text only
+           annotate("text",
+                    x = 1,
+                    y = 0,
+                    size = 7,
+                    fontface=2,
+                    label = title) + 
+           theme_void()+
+           theme(plot.background = element_rect(fill=bgcolor, color=bgcolor))
+  )
+}
+```
+
+
 
 ```{r}
 # create HDI class for a better representation
@@ -120,55 +138,94 @@ africa_data$HDIClass <- HDIClass
 ### First Graph
 
 ```{r}
-# Plot first Map, Africa HDI and School
-map_HDI_School <- africa_data %>%  ggplot() + 
-  #labs(title="Les limites de l'IDH",
-   #       subtitle = "Absence de prise en compte des inégalités") +
-  
+#Calcul des limits de gradient
+
+limitsHDI <- summary(africa_data$HDI)[c("Min.", "Max.")]
+limitsIHDI <- summary(africa_data$Inequality.adjusted.HDI..IHDI.)[c("Min.", "Max.")]
+
+limits <- c(min = min(limitsHDI["Min."], limitsIHDI["Min."]), max= max(limitsHDI["Max."], limitsIHDI["Max."]))
+
+# Map of HDI in Africa
+map_HDI <- africa_data %>%  ggplot() + 
   geom_sf(aes(fill=HDI)) +
-  scale_fill_gradientn("IDH", colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B")) +
-
-  #geom_sf(aes(geometry = geometry.1, color=HDIClass , size=Inequality.in.income....)) +
-
-  #scale_color_manual("Classes IDH", values=c("black", "#E64814", "#E9CB0D", "#9CDE3B"), 
-   #                  breaks=c("TB", "B", "M", "E"), labels=c("Très Bas", "Bas", "Moyen",     "Élevé")) +
-
-  scale_size(name="Inégalité d'income") +
+  scale_fill_gradientn("IDH", 
+                       colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B"), 
+                       limits = limits) +
   theme_tufte() +
   theme(axis.line = element_blank(),
         axis.text = element_blank(),
-        axis.ticks = element_blank())
-  #guides(fill = guide_colourbar(order=1),
-         # color = guide_legend(order=2),
-         # size = guide_legend(order=3))
+        axis.ticks = element_blank(),
+        plot.caption = element_text(hjust=0.5, vjust = 1, size=rel(1.2)))
 
-map_HDI_School
+#map_HDI
 
 
 ## second part of the first grahp : component of HDI
 
+# Prenons deux pays avec un faible HDI et deux pays avec un fort HDI
+
+#Faible
 niger <- dta.hdi["Niger",]
+car <- dta.hdi["Central African Republic",]
+
+#Fort
 southAfrica <- dta.hdi["South Africa",]
+morocco <- dta.hdi["Morocco",]
 
 hist.Niger <- data.frame(t(niger)[7:9,])
+hist.CAR <- data.frame(t(car)[7:9,])
+
 hist.RSA <- data.frame(t(southAfrica)[7:9,])
+hist.Morocco <- data.frame(t(morocco)[7:9,])
 
 colnames(hist.Niger) = c("value")
-colnames(hist.RSA) = c("value")
+colnames(hist.CAR) = c("value")
 
-indexes = rownames(histoHDI)
+colnames(hist.RSA) = c("value")
+colnames(hist.Morocco) = c("value")
+
 
 histoHDI <- data.frame(index = c("IESP", "INI", "IPIB","IESP", "INI", "IPIB"), 
-                       rbind(hist.Niger, hist.RSA))
+                       rbind(hist.Niger, hist.RSA, hist.CAR, hist.Morocco))
 
 histoHDI <- data.frame(histoHDI,
-                       Country = c(rep("Niger",3), rep("South Africa", 3)))
+                       Country = c(rep("Niger",3), rep("South Africa", 3), rep("Central African Republic", 3), rep("Morocco", 3)))
+
+indexes = rownames(histoHDI)
                        
 colnames(histoHDI) <- c("index", "values", "Country")
 
-histoHDI %>% ggplot(aes(y = values, x=index, fill = Country)) +
-  geom_col() +
-  facet_wrap(~Country)
+# annotate with value of HDI
+annotation <- data.frame(
+   label=c("HDI: 0.35", "HDI: 0.67", "HDI: 0.35", "HDI: 0.65"),
+   Country=c("Niger", "South Africa", "Central African Republic", "Morocco"),
+   hjust=c(0, -0.2, 0, 0.2)
+)
+
+histo <- histoHDI %>% ggplot() +
+  geom_col(aes(y = values, x=index, fill = index), width = 0.5) +
+  facet_wrap(~Country)+
+  
+  geom_text(data = annotation,
+            mapping = aes(x = 2, y=0.8, label=label),
+            size=4,
+            )+
+
+  theme_tufte() +
+  theme(legend.position = "None",
+        axis.title = element_blank())
+
+#histo
+
+# Grid Extra for first visualisation
+
+grid.arrange(
+  grobs=list(map_HDI, histo),
+  widths=c(1,1),
+  #layout_matrix = rbind(c(1,1))
+  bottom="Indice de développement humain en Afrique \n la valeur de l'IDH seule est insuffisante pour caractériser un pays"
+)
+
 ```
 
 Column {.tabset .tabset-fade}
