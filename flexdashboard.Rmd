@@ -279,7 +279,7 @@ grid.arrange(
   grobs=list(map_HDI, histo),
   widths=c(1,1),
   #layout_matrix = rbind(c(1,1))
-  bottom="Indice de développement humain en Afrique. \n La valeur de l'IDH seule est insuffisante pour caractériser un pays"
+  bottom="Indice de développement humain (IDH) en Afrique \n La valeur de l'IDH seule est insuffisante pour caractériser un pays"
 )
 
 ```
@@ -307,7 +307,7 @@ Column {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 
-### Importance de L'IDHI
+### Importance de l'IDHI
 
 ```{r}
 # Plot first Map, Africa HDI and School
@@ -377,7 +377,7 @@ grid.arrange(
   grobs=list(map_IHDI, ratio_graph),
   widths=c(1,1),
   #layout_matrix = rbind(c(1,1))
-  bottom="L'Indice de développement humain ajusté aux inégalités pénalise l'IDH"
+  bottom="L'Indice de Développement Humain ajusté aux inégalités (IDHI) pénalise l'IDH"
 )
 ```
 
@@ -386,7 +386,7 @@ grid.arrange(
 ### Détails sur les inégalités
 
 ```{r}
-par(mfrow = c(2,2), omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0))
+par(mfrow = c(2,2), omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(2,0,1,0))
 
 # =======
 # South Africa
@@ -411,7 +411,7 @@ radarchart(dta.g3.RSA[-4],
            title = "Afrique du Sud", 
            maxmin = TRUE)
 
-text(0,1.07,paste(dta.g3.RSA[3,1], "%"), col = colRSA)
+text(0,1.03,paste(dta.g3.RSA[3,1], "%"), col = colRSA)
 text(-1.03,-0.77,paste(dta.g3.RSA[3,2], "%"), col = colRSA)
 text(1.03,-0.77,paste(dta.g3.RSA[3,3], "%"), col = colRSA)
 text(1.4,0.4, paste("GDI :", dta.g3.RSA[3,4]), cex = 1, family = "sans", font = 4)
@@ -440,10 +440,10 @@ radarchart(dta.g3.MOR[-4],
            title = "Maroc", 
            maxmin = TRUE)
 
-text(0,1.07,paste(dta.g3.MOR[3,1], "%"), col = colMOR)
+text(0,1.03,paste(dta.g3.MOR[3,1], "%"), col = colMOR)
 text(-1.03,-0.77,paste(dta.g3.MOR[3,2], "%"), col = colMOR)
 text(1.03,-0.77,paste(dta.g3.MOR[3,3], "%"), col = colMOR)
-text(1.4,0.4, paste("GDI :", dta.g3.MOR[3,4], "%"), cex = 1, family = "sans", font = 4)
+text(1.4,0.4, paste("GDI :", dta.g3.MOR[3,4]), cex = 1, family = "sans", font = 4)
 
 # =======
 # Niger
@@ -468,7 +468,7 @@ radarchart(dta.g3.NIG[-4],
            title = "Niger", 
            maxmin = TRUE)
 
-text(0,1.07,paste(dta.g3.NIG[3,1], "%"), col = colNIG)
+text(0,1.03,paste(dta.g3.NIG[3,1], "%"), col = colNIG)
 text(-1.03,-0.77,paste(dta.g3.NIG[3,2], "%"), col = colNIG)
 text(1.03,-0.77,paste(dta.g3.NIG[3,3],"%"), col = colNIG)
 text(1.4,0.4, paste("GDI :", dta.g3.NIG[3,4]), cex = 1, family = "sans", font = 4)
@@ -496,10 +496,13 @@ radarchart(dta.g3.CAR[-4],
            title = "République Centrafricaine",
            maxmin = TRUE)
 
-text(0,1.07,paste(dta.g3.CAR[3,1], "%"), col = colCAR)
+text(0,1.03,paste(dta.g3.CAR[3,1], "%"), col = colCAR)
 text(-1.03,-0.77,paste(dta.g3.CAR[3,2],"%"), col = colCAR)
 text(1.03,-0.77,paste(dta.g3.CAR[3,3], "%"), col = colCAR)
 text(1.4,0.4, paste("GDI :", dta.g3.CAR[3,4]), cex = 1, family = "sans", font = 4)
+
+mtext("Limite de l'IDHI comme unique valeur pour évaluer les inégalités", side = 1, -2.5, -1, font = 2)
+mtext("Hétérogénéité de la décomposition des inégalités", side = 1, -1.3,-1, cex = 0.8)
 
 ```
 
