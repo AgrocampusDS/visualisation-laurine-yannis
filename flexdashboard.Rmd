@@ -345,11 +345,11 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
   
   geom_rect(xmin=-Inf, xmax=Inf, ymin=31, ymax=42.5, color="black", alpha=0, size=0.1) +
   geom_text(x = 1.5, y = 40, size=3,
-    label="Ratio élevé : \n IDH peu pénalisé") +
+    label="Ratio élevé : \n IDH moins pénalisé") +
   
   geom_rect(xmin=-Inf, xmax=Inf, ymin=0, ymax=5, color="black", alpha=0, size=0.1) +
   geom_text(x = 1.5, y = 2.5, size=3,
-    label="Ratio faible : \n IDH très pénalisé") +
+    label="Ratio faible : \n IDH plus pénalisé") +
   
   geom_text(x = -0.25, y = 36, size = 2.5, label="Niger")+
   geom_text(x = -0.25, y = 33, size = 2.5, label="Maroc")+
