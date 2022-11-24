@@ -7,9 +7,7 @@ output:
     orientation: columns
     vertical_layout: fill
     navbar:
-      - { title: "Moodle", href: "https://tice.agrocampus-ouest.fr/course/view.php?id=6726", align: left }
-      - { icon: "fa-twitter", href: "https://twitter.com/marie_etienne", align: right }
-      - { icon: "fa-linkedin", href: "https://www.linkedin.com/in/marie-etienne-818a7115/", align: right }
+      - { icon: "fa-github", href: "https://github.com/AgrocampusDS/visualisation-laurine-yannis", align: right }
 params:
   setup_path: ../resources/
 ---
@@ -21,6 +19,10 @@ params:
 }
 .navbar-brand {
 color:white!important;
+}
+
+.navbar-author{
+display:none;
 }
 
 
@@ -165,7 +167,7 @@ africa_data$HDIClass <- HDIClass
 ```
 
 
-### First Graph
+### Focus sur l'HDI
 
 ```{r}
 #Calcul des limits de gradient
@@ -183,6 +185,7 @@ map_HDI <- africa_data %>%  ggplot() +
   scale_fill_gradientn("IDH", 
                        colors=c("#464545", "#EC6E45", "#EBD861", "#A3D15F"), 
                        limits = limits) +
+  
   theme_tufte() +
   theme(axis.line = element_blank(),
         axis.text = element_blank(),
@@ -253,16 +256,6 @@ histo <- histoHDI %>% ggplot() +
             mapping = aes(x = 2, y=0.8, label=label),
             size=3,
             )+
-  
-  # geom_rect(data=rect,
-  #           mapping = aes(xmin = xmin, 
-  #                         xmax=xmax, 
-  #                         ymin=ymin, 
-  #                         ymax=ymax
-  #                         ),
-  #           #fill="blue",
-  #           alpha=0.1,
-  #           color=NA)+
 
   theme_tufte() +
   theme(legend.position = "None",
@@ -286,15 +279,20 @@ grid.arrange(
 
 ```
 
-### Explications
+### Bibliographie sur l'HDI
 
-
-
+<iframe
+    src="./informationsHDI.pdf" 
+    frameborder="0"
+    style="overflow:hidden;height:100%;width:100%" 
+    height="100%" 
+    width="100%">
+</iframe>
 Column {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 
-### Second Graph
+### Importance de L'IHDI
 
 ```{r}
 # Plot first Map, Africa HDI and School
@@ -370,7 +368,7 @@ grid.arrange(
 
 
 
-### Third Graph
+### Détails sur les inégalités
 
 ```{r}
 par(mfrow = c(2,2), omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0))
