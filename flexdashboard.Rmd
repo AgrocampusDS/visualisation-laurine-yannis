@@ -41,7 +41,7 @@ library("ggnewscale")
 library("fmsb")
 ```
 
-Column {data-width=650}
+Column {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 ```{r}
@@ -249,6 +249,10 @@ grid.arrange(
 
 ```
 
+### Explications
+
+
+
 Column {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
@@ -289,13 +293,18 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
   labs(x="Ratio IHDI/HDI", y =element_blank()) +
   geom_vline(xintercept =1, color="#9CDE3B")+
   
-  geom_rect(xmin=-Inf, xmax=Inf, ymin=37, ymax=42.5, color="black", alpha=0, size=0.1) +
+  geom_rect(xmin=-Inf, xmax=Inf, ymin=31, ymax=42.5, color="black", alpha=0, size=0.1) +
   geom_text(x = 1.5, y = 40, size=3,
     label="Ratio élevé : \n IDH peu pénalisé") +
   
   geom_rect(xmin=-Inf, xmax=Inf, ymin=0, ymax=5, color="black", alpha=0, size=0.1) +
   geom_text(x = 1.5, y = 2.5, size=3,
     label="Ratio faible : \n IDH très pénalisé") +
+  
+  geom_text(x = -0.25, y = 36, size = 2.5, label="Niger")+
+  geom_text(x = -0.25, y = 33, size = 2.5, label="Morocco")+
+  geom_text(x = -0.2, y = 15, size = 2.5, label="RSA")+
+  geom_text(x = -0.3, y = 2, size = 2.5, label="Central African \n Republic")+
   
   theme_light()+
   theme(axis.text.x = element_text(hjust=1),
@@ -304,9 +313,12 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
         panel.grid.minor = element_line(color = "grey",
                                   size = 0.2,
                                   linetype = 1),
-        panel.border = element_blank()
+        panel.border = element_blank(),
+      
         ) +
-  scale_x_continuous(breaks = seq(0,1, 0.1), limits = c(0,1))+
+  scale_x_continuous(breaks = seq(0,1, .1), 
+                     labels=c("0", ".1", ".2",".3", ".4", ".5", ".6", ".7",".8", ".9", "1"),  
+                     limits = c(0,1))+
   coord_cartesian(clip = "off")
 
 #ratio_graph
