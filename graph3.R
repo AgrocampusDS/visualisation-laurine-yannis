@@ -4,9 +4,7 @@
 
 dta1 <- data.frame(africa_data[,c("HDI", 
                           "Inequality.adjusted.HDI..IHDI.")])[,-3]
-
 dta1 <- data.frame(c(dta1, diff = dta1[1]-dta1[2]))
-
 rownames(dta1) <- africa_data$Country
 
 # dta1[which.max(dta1$diff),] # Botswana (5)
@@ -154,11 +152,5 @@ legend("topright",
        text.col = "grey25", pt.cex = 2)
 
 
-# radarchart(dat, 
-#            axistype=1,
-#            seg=5, 
-#            plty=1, 
-#            vlabels=c("Total\nQOL", "Physical\naspects", 
-#                      "Phychological\naspects", "Social\naspects", "Environmental\naspects"), 
-#            title="(axis=1, 5 segments, with specified vlabels)", 
-#            vlcex=0.5)
+
+# central african republic, morocco, niger, south africa 
