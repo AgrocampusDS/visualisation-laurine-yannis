@@ -375,106 +375,11 @@ grid.arrange(
 ```{r}
 par(mfrow = c(2,2), omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0))
 
-# =========================
-# Central African Republic 
-
-colCAR = c("#E64814")
-areaCAR = rgb(232,120,84, alpha = 120, maxColorValue = 255 )
-
-radarchart(dta.g3.CAR[-4], 
-           # -- GRID --
-           cglty = 2,       # Grid line type
-           cglcol = "grey", # Grid line color
-           
-           # -- LINE -- 
-           pcol = colCAR,   # Color for each line
-           plwd = 2,        # Width for each line
-           plty = 1 ,       # Line type for each line
-           
-           # -- AREA --
-           pfcol = areaCAR,
-           
-           # -- TEXTS --
-           title = "République Centrafricaine",
-           maxmin = TRUE)
-
-text(0,1.07,paste(dta.g3.CAR[3,1]), col = colCAR)
-text(-1.03,-0.77,paste(dta.g3.CAR[3,2]), col = colCAR)
-text(1.03,-0.77,paste(dta.g3.CAR[3,3]), col = colCAR)
-text(1.4,0.4, paste("GDI :", dta.g3.CAR[3,4]), cex = 1, family = "sans", font = 4)
-
-# par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
-#     family="Arial", las=1)
-
-# =======
-# Morocco
-
-colMOR = c("#E64814")
-areaMOR = rgb(232,120,84, alpha = 120, maxColorValue = 255 )
-
-radarchart(dta.g3.MOR[-4], 
-           # -- GRID --
-           cglty = 2,       # Grid line type
-           cglcol = "grey", # Grid line color
-           
-           # -- LINE -- 
-           pcol = colMOR,   # Color for each line
-           plwd = 2,        # Width for each line
-           plty = 1 ,       # Line type for each line
-           
-           # -- AREA --
-           pfcol = areaMOR,
-           
-           # -- TEXTS --
-           title = "Maroc", 
-           maxmin = TRUE)
-
-text(0,1.07,paste(dta.g3.MOR[3,1]), col = colMOR)
-text(-1.03,-0.77,paste(dta.g3.MOR[3,2]), col = colMOR)
-text(1.03,-0.77,paste(dta.g3.MOR[3,3]), col = colMOR)
-text(1.4,0.4, paste("GDI :", dta.g3.MOR[3,4]), cex = 1, family = "sans", font = 4)
-
-
-# par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
-#     family="Arial", las=1)
-
-
-# =======
-# Niger
-
-colNIG = c("#E64814")
-areaNIG = rgb(232,120,84, alpha = 120, maxColorValue = 255 )
-
-radarchart(dta.g3.NIG[-4], 
-           # -- GRID --
-           cglty = 2,       # Grid line type
-           cglcol = "grey", # Grid line color
-           
-           # -- LINE -- 
-           pcol = colNIG,   # Color for each line
-           plwd = 2,        # Width for each line
-           plty = 1 ,       # Line type for each line
-           
-           # -- AREA --
-           pfcol = areaNIG,
-           
-           # -- TEXTS --
-           title = "Niger", 
-           maxmin = TRUE)
-
-text(0,1.07,paste(dta.g3.NIG[3,1]), col = colNIG)
-text(-1.03,-0.77,paste(dta.g3.NIG[3,2]), col = colNIG)
-text(1.03,-0.77,paste(dta.g3.NIG[3,3]), col = colNIG)
-text(1.4,0.4, paste("GDI :", dta.g3.NIG[3,4]), cex = 1, family = "sans", font = 4)
-
-# par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
-#     family="Arial", las=1)
-
 # =======
 # South Africa
 
-colRSA = c("#E64814")
-areaRSA = rgb(232,120,84, alpha = 120, maxColorValue = 255 )
+colRSA = c("#a3d15f")
+areaRSA = rgb(163, 209, 95, alpha = 120, maxColorValue = 255 )
 
 radarchart(dta.g3.RSA[-4], 
            # -- GRID --
@@ -493,14 +398,95 @@ radarchart(dta.g3.RSA[-4],
            title = "Afrique du Sud", 
            maxmin = TRUE)
 
-text(0,1.07,paste(dta.g3.RSA[3,1]), col = colRSA)
-text(-1.03,-0.77,paste(dta.g3.RSA[3,2]), col = colRSA)
-text(1.03,-0.77,paste(dta.g3.RSA[3,3]), col = colRSA)
+text(0,1.07,paste(dta.g3.RSA[3,1], "%"), col = colRSA)
+text(-1.03,-0.77,paste(dta.g3.RSA[3,2], "%"), col = colRSA)
+text(1.03,-0.77,paste(dta.g3.RSA[3,3], "%"), col = colRSA)
 text(1.4,0.4, paste("GDI :", dta.g3.RSA[3,4]), cex = 1, family = "sans", font = 4)
 
 
-# par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
-#     family="Arial", las=1)
+# =======
+# Morocco
+
+colMOR = c("#a3d15f")
+areaMOR = rgb(163, 209, 95, alpha = 120, maxColorValue = 255 )
+
+radarchart(dta.g3.MOR[-4], 
+           # -- GRID --
+           cglty = 2,       # Grid line type
+           cglcol = "grey", # Grid line color
+           
+           # -- LINE -- 
+           pcol = colMOR,   # Color for each line
+           plwd = 2,        # Width for each line
+           plty = 1 ,       # Line type for each line
+           
+           # -- AREA --
+           pfcol = areaMOR,
+           
+           # -- TEXTS --
+           title = "Maroc", 
+           maxmin = TRUE)
+
+text(0,1.07,paste(dta.g3.MOR[3,1], "%"), col = colMOR)
+text(-1.03,-0.77,paste(dta.g3.MOR[3,2], "%"), col = colMOR)
+text(1.03,-0.77,paste(dta.g3.MOR[3,3], "%"), col = colMOR)
+text(1.4,0.4, paste("GDI :", dta.g3.MOR[3,4], "%"), cex = 1, family = "sans", font = 4)
+
+# =======
+# Niger
+
+colNIG = c("#464545")
+areaNIG = rgb(70, 69, 69, alpha = 120, maxColorValue = 255 )
+
+radarchart(dta.g3.NIG[-4], 
+           # -- GRID --
+           cglty = 2,       # Grid line type
+           cglcol = "grey", # Grid line color
+           
+           # -- LINE -- 
+           pcol = colNIG,   # Color for each line
+           plwd = 2,        # Width for each line
+           plty = 1 ,       # Line type for each line
+           
+           # -- AREA --
+           pfcol = areaNIG,
+           
+           # -- TEXTS --
+           title = "Niger", 
+           maxmin = TRUE)
+
+text(0,1.07,paste(dta.g3.NIG[3,1], "%"), col = colNIG)
+text(-1.03,-0.77,paste(dta.g3.NIG[3,2], "%"), col = colNIG)
+text(1.03,-0.77,paste(dta.g3.NIG[3,3],"%"), col = colNIG)
+text(1.4,0.4, paste("GDI :", dta.g3.NIG[3,4]), cex = 1, family = "sans", font = 4)
+
+# =========================
+# Central African Republic 
+
+colCAR = c("#464545")
+areaCAR = rgb(70, 69, 69, alpha = 120, maxColorValue = 255 )
+
+radarchart(dta.g3.CAR[-4], 
+           # -- GRID --
+           cglty = 2,       # Grid line type
+           cglcol = "grey", # Grid line color
+           
+           # -- LINE -- 
+           pcol = colCAR,   # Color for each line
+           plwd = 2,        # Width for each line
+           plty = 1 ,       # Line type for each line
+           
+           # -- AREA --
+           pfcol = areaCAR,
+           
+           # -- TEXTS --
+           title = "République Centrafricaine",
+           maxmin = TRUE)
+
+text(0,1.07,paste(dta.g3.CAR[3,1], "%"), col = colCAR)
+text(-1.03,-0.77,paste(dta.g3.CAR[3,2],"%"), col = colCAR)
+text(1.03,-0.77,paste(dta.g3.CAR[3,3], "%"), col = colCAR)
+text(1.4,0.4, paste("GDI :", dta.g3.CAR[3,4]), cex = 1, family = "sans", font = 4)
 
 ```
 
