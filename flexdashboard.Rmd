@@ -1,5 +1,5 @@
 ---
-title: "Nécessité de détailler l'IDH"
+title: "Nécessité de détailler la mesure du développement humain (IDH & IDHI)"
 author: "Laurine KOMENDANCZYK & Yannis BARBA"
 output: 
   flexdashboard::flex_dashboard:
@@ -8,6 +8,7 @@ output:
     vertical_layout: fill
     navbar:
       - { icon: "fa-github", href: "https://github.com/AgrocampusDS/visualisation-laurine-yannis", align: right }
+      - { icon: "fa-kip-sign", href: "https://www.kaggle.com/datasets/sudhirnl7/human-development-index-hdi", align: right, style: "color:white;" }
 params:
   setup_path: ../resources/
 ---
@@ -23,6 +24,10 @@ color:white!important;
 
 .navbar-author{
 display:none;
+}
+
+icon {
+  color: white;
 }
 
 
@@ -167,7 +172,7 @@ africa_data$HDIClass <- HDIClass
 ```
 
 
-### Focus sur l'HDI
+### Focus sur l'IDH
 
 ```{r}
 #Calcul des limits de gradient
@@ -224,7 +229,7 @@ histoHDI <- data.frame(index = c("IESP", "INI", "IPIB","IESP", "INI", "IPIB"),
                        rbind(hist.Niger, hist.RSA, hist.CAR, hist.Morocco))
 
 histoHDI <- data.frame(histoHDI,
-                       Country = c(rep("Niger",3), rep("South Africa", 3), rep("Central African Republic", 3), rep("Morocco", 3)),
+                       Country = c(rep("Niger",3), rep("Afrique du Sud (RSA)", 3), rep("République Centrafricaine", 3), rep("Maroc", 3)),
                        Class = c(rep("B",3), rep("B", 3), rep("E", 3), rep("E", 3))
                        )
 
@@ -234,8 +239,8 @@ colnames(histoHDI) <- c("index", "values", "Country")
 
 # annotate with value of HDI
 annotation <- data.frame(
-   label=c("HDI: 0.35", "HDI: 0.67", "HDI: 0.35", "HDI: 0.65"),
-   Country=c("Niger", "South Africa", "Central African Republic", "Morocco"),
+   label=c("IDH : 0.35", "IDH : 0.67", "IDH : 0.35", "IDH : 0.65"),
+   Country=c("Niger", "Afrique du Sud (RSA)", "République Centrafricaine", "Maroc"),
    hjust=c(0, -0.15, 0, 0.15)
 )
 
@@ -274,12 +279,12 @@ grid.arrange(
   grobs=list(map_HDI, histo),
   widths=c(1,1),
   #layout_matrix = rbind(c(1,1))
-  bottom="Indice de développement humain en Afrique \n la valeur de l'IDH seule est insuffisante pour caractériser un pays"
+  bottom="Indice de développement humain en Afrique. \n La valeur de l'IDH seule est insuffisante pour caractériser un pays"
 )
 
 ```
 
-### Bibliographie sur l'HDI
+### Bibliographie sur l'IDH
 
 <iframe
     src="./informationsHDI.pdf" 
@@ -288,20 +293,30 @@ grid.arrange(
     height="100%" 
     width="100%">
 </iframe>
+
+
+
+### Détails
+
+Source : https://www.kaggle.com/datasets/sudhirnl7/human-development-index-hdi \n
+
+
+Auteurs : Laurine KOMENDANCZYK & Yannis BARBA
+
 Column {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 
-### Importance de L'IHDI
+### Importance de L'IDHI
 
 ```{r}
 # Plot first Map, Africa HDI and School
 map_IHDI <- africa_data %>%  ggplot() + 
   geom_sf(aes(fill=Inequality.adjusted.HDI..IHDI.)) +
-  scale_fill_gradientn("IHDI", colors=c("#464545", "#EC6E45", "#EBD861", "#A3D15F"),
+  scale_fill_gradientn("IDHI", colors=c("#464545", "#EC6E45", "#EBD861", "#A3D15F"),
                        limits = limits) +
 
-  scale_size(name="IHDI") +
+  scale_size(name="IDHI") +
   theme_tufte() +
   theme(axis.line = element_blank(),
         axis.text = element_blank(),
@@ -325,7 +340,7 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
   scale_fill_manual("Classes IDH", values=c("#A3D15F", "#EBD861", "#EC6E45","#464545"),
                      breaks=c("E", "M", "B","TB"), labels=c("Élevé", "Moyen", "Bas","Très Bas"))+
   
-  labs(x="Ratio IHDI/HDI", y =element_blank()) +
+  labs(x="Ratio IDHI/IDH", y =element_blank()) +
   geom_vline(xintercept =1, color="#9CDE3B")+
   
   geom_rect(xmin=-Inf, xmax=Inf, ymin=31, ymax=42.5, color="black", alpha=0, size=0.1) +
@@ -337,9 +352,9 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
     label="Ratio faible : \n IDH très pénalisé") +
   
   geom_text(x = -0.25, y = 36, size = 2.5, label="Niger")+
-  geom_text(x = -0.25, y = 33, size = 2.5, label="Morocco")+
+  geom_text(x = -0.25, y = 33, size = 2.5, label="Maroc")+
   geom_text(x = -0.2, y = 15, size = 2.5, label="RSA")+
-  geom_text(x = -0.3, y = 2, size = 2.5, label="Central African \n Republic")+
+  geom_text(x = -0.6, y = 2, size = 2.5, label="République Centrafricaine")+
   
   theme_light()+
   theme(axis.text.x = element_text(hjust=1),
@@ -362,7 +377,7 @@ grid.arrange(
   grobs=list(map_IHDI, ratio_graph),
   widths=c(1,1),
   #layout_matrix = rbind(c(1,1))
-  bottom="Indice de développement humain ajusté aux inégalités"
+  bottom="L'Indice de développement humain ajusté aux inégalités pénalise l'IDH"
 )
 ```
 
