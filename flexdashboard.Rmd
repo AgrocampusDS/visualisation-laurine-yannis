@@ -16,11 +16,11 @@ params:
 
 <style>                     
 .navbar {
-  background-color:#46ACC8;
+  background-color:#463E33;
   border-color:#46ACC8;
 }
 .navbar-brand {
-color:black!important;
+color:white!important;
 }
 
 
@@ -138,11 +138,13 @@ limitsIHDI <- summary(africa_data$Inequality.adjusted.HDI..IHDI.)[c("Min.", "Max
 
 limits <- c(min = min(limitsHDI["Min."], limitsIHDI["Min."]), max= max(limitsHDI["Max."], limitsIHDI["Max."]))
 
+# old colors : "black", "#E64814", "#E9CB0D", "#9CDE3B"
+
 # Map of HDI in Africa
 map_HDI <- africa_data %>%  ggplot() + 
   geom_sf(aes(fill=HDI)) +
   scale_fill_gradientn("IDH", 
-                       colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B"), 
+                       colors=c("#464545", "#EC6E45", "#EBD861", "#A3D15F"), 
                        limits = limits) +
   theme_tufte() +
   theme(axis.line = element_blank(),
@@ -182,7 +184,9 @@ histoHDI <- data.frame(index = c("IESP", "INI", "IPIB","IESP", "INI", "IPIB"),
                        rbind(hist.Niger, hist.RSA, hist.CAR, hist.Morocco))
 
 histoHDI <- data.frame(histoHDI,
-                       Country = c(rep("Niger",3), rep("South Africa", 3), rep("Central African Republic", 3), rep("Morocco", 3)))
+                       Country = c(rep("Niger",3), rep("South Africa", 3), rep("Central African Republic", 3), rep("Morocco", 3)),
+                       Class = c(rep("B",3), rep("B", 3), rep("E", 3), rep("E", 3))
+                       )
 
 indexes = rownames(histoHDI)
                        
@@ -192,7 +196,7 @@ colnames(histoHDI) <- c("index", "values", "Country")
 annotation <- data.frame(
    label=c("HDI: 0.35", "HDI: 0.67", "HDI: 0.35", "HDI: 0.65"),
    Country=c("Niger", "South Africa", "Central African Republic", "Morocco"),
-   hjust=c(0, -0.1, 0, 0.1)
+   hjust=c(0, -0.15, 0, 0.15)
 )
 
 rect <- data.frame(
@@ -200,33 +204,38 @@ rect <- data.frame(
   xmax = rep(3.5, 4),
   ymin = rep(-Inf, 4),
   ymax = rep(Inf, 4),
-  fill=factor(c("black", "blue", "black", "blue"))
+  fill=factor(c("T", "R", "T", "R"))
 )
 
 histo <- histoHDI %>% ggplot() +
-  geom_col(aes(y = values, x=index, fill = index), width = 0.5) +
+  geom_col(aes(y = values, x=index, fill = index), width = 0.35) +
+  scale_fill_manual(values=c("#6A5D4D", "#8E8477", "#B5ACA1"))+
   facet_wrap(~Country)+
   
   geom_text(data = annotation,
             mapping = aes(x = 2, y=0.8, label=label),
-            size=4,
+            size=3,
             )+
   
-  geom_rect(data=rect,
-            mapping = aes(xmin = xmin, 
-                          xmax=xmax, 
-                          ymin=ymin, 
-                          ymax=ymax,
-                          #fill=fill
-                          ),
-            #fill="blue",
-            alpha=0.1,
-            color=NA)+
+  # geom_rect(data=rect,
+  #           mapping = aes(xmin = xmin, 
+  #                         xmax=xmax, 
+  #                         ymin=ymin, 
+  #                         ymax=ymax
+  #                         ),
+  #           #fill="blue",
+  #           alpha=0.1,
+  #           color=NA)+
 
   theme_tufte() +
   theme(legend.position = "None",
-        axis.title = element_blank())
-
+        axis.title = element_blank(),
+        panel.spacing = unit(2, "lines"),
+        panel.background = element_rect(fill="#F2F2F3", colour = "white"),
+        panel.border = element_blank(),
+        strip.text.x = element_text(
+        size = 7, color = "black", face = "bold.italic"
+        ))
 #histo
 
 # Grid Extra for first visualisation
@@ -250,7 +259,7 @@ Column {.tabset .tabset-fade}
 # Plot first Map, Africa HDI and School
 map_IHDI <- africa_data %>%  ggplot() + 
   geom_sf(aes(fill=Inequality.adjusted.HDI..IHDI.)) +
-  scale_fill_gradientn("IHDI", colors=c("black", "#E64814", "#E9CB0D", "#9CDE3B"),
+  scale_fill_gradientn("IHDI", colors=c("#464545", "#EC6E45", "#EBD861", "#A3D15F"),
                        limits = limits) +
 
   scale_size(name="IHDI") +
@@ -274,7 +283,7 @@ ratio_graph <- africa_data %>% drop_na(Inequality.adjusted.HDI..IHDI.) %>%
   
   ggplot() +
   geom_col(aes(y=reorder(Country, RatioIDHI_IDH), x=RatioIDHI_IDH, fill=HDIClass), width = 0.95) +
-  scale_fill_manual("Classes IDH", values=c("#9CDE3B","#EAC60E", "#EA7513","#BE3E14"),
+  scale_fill_manual("Classes IDH", values=c("#A3D15F", "#EBD861", "#EC6E45","#464545"),
                      breaks=c("E", "M", "B","TB"), labels=c("Élevé", "Moyen", "Bas","Très Bas"))+
   
   labs(x="Ratio IHDI/HDI", y =element_blank()) +
