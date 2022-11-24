@@ -395,14 +395,13 @@ radarchart(dta.g3.CAR[-4],
            pfcol = areaCAR,
            
            # -- TEXTS --
-           title = "République Centre Africaine",
-           maxmin = TRUE,
-           
-           # -- AXES --
-           
-           axistype = 2,
-           axislabcol = colCAR)
+           title = "République Centrafricaine",
+           maxmin = TRUE)
 
+text(0,1.07,paste(dta.g3.CAR[3,1]), col = colCAR)
+text(-1.03,-0.77,paste(dta.g3.CAR[3,2]), col = colCAR)
+text(1.03,-0.77,paste(dta.g3.CAR[3,3]), col = colCAR)
+text(1.4,0.4, paste("GDI :", dta.g3.CAR[3,4]), cex = 1, family = "sans", font = 4)
 
 # par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
 #     family="Arial", las=1)
@@ -428,12 +427,13 @@ radarchart(dta.g3.MOR[-4],
            
            # -- TEXTS --
            title = "Maroc", 
-           maxmin = TRUE,
-           
-           # -- AXES --
-           
-           axistype = 2,
-           axislabcol = colMOR)
+           maxmin = TRUE)
+
+text(0,1.07,paste(dta.g3.MOR[3,1]), col = colMOR)
+text(-1.03,-0.77,paste(dta.g3.MOR[3,2]), col = colMOR)
+text(1.03,-0.77,paste(dta.g3.MOR[3,3]), col = colMOR)
+text(1.4,0.4, paste("GDI :", dta.g3.MOR[3,4]), cex = 1, family = "sans", font = 4)
+
 
 # par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
 #     family="Arial", las=1)
@@ -460,12 +460,12 @@ radarchart(dta.g3.NIG[-4],
            
            # -- TEXTS --
            title = "Niger", 
-           maxmin = TRUE,
-           
-           # -- AXES --
-           
-           axistype = 2,
-           axislabcol = colNIG)
+           maxmin = TRUE)
+
+text(0,1.07,paste(dta.g3.NIG[3,1]), col = colNIG)
+text(-1.03,-0.77,paste(dta.g3.NIG[3,2]), col = colNIG)
+text(1.03,-0.77,paste(dta.g3.NIG[3,3]), col = colNIG)
+text(1.4,0.4, paste("GDI :", dta.g3.NIG[3,4]), cex = 1, family = "sans", font = 4)
 
 # par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
 #     family="Arial", las=1)
@@ -491,12 +491,13 @@ radarchart(dta.g3.RSA[-4],
            
            # -- TEXTS --
            title = "Afrique du Sud", 
-           maxmin = TRUE,
-           
-           # -- AXES --
-           
-           axistype = 2,
-           axislabcol = colRSA)
+           maxmin = TRUE)
+
+text(0,1.07,paste(dta.g3.RSA[3,1]), col = colRSA)
+text(-1.03,-0.77,paste(dta.g3.RSA[3,2]), col = colRSA)
+text(1.03,-0.77,paste(dta.g3.RSA[3,3]), col = colRSA)
+text(1.4,0.4, paste("GDI :", dta.g3.RSA[3,4]), cex = 1, family = "sans", font = 4)
+
 
 # par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
 #     family="Arial", las=1)

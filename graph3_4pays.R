@@ -62,14 +62,15 @@ radarchart(dta.g3.CAR[-4],
            
            # -- TEXTS --
            title = "République Centre Africaine",
-           maxmin = TRUE,
-           
-           # -- AXES --
-           
-           axistype = 2,
-           axislabcol = colCAR)
+           maxmin = TRUE)
 
+text(0,1.07,paste(dta.g3.CAR[3,1]), col = colCAR)
+text(-1.03,-0.75,paste(dta.g3.CAR[3,2]), col = colCAR)
+text(1.03,-0.75,paste(dta.g3.CAR[3,3]), col = colCAR)
+text(1.4,0.4, paste("GDI :", dta.g3.CAR[3,4]), cex = 1, family = "sans", font = 4)
 
+plotimage("D:/Documents/3A/visualisation/femme.png", 
+          size = 1, pos = 1)
 # par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
 #     family="Arial", las=1)
 
@@ -166,6 +167,10 @@ radarchart(dta.g3.RSA[-4],
 
 # par(omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(0,0,2,0),
 #     family="Arial", las=1)
+
+
+# GDI 
+# c(CAR = dta.g3.CAR$GDI[3], MOR = dta.g3.MOR$GDI[3], NIG = dta.g3.NIG$GDI[3], RSA = dta.g3.RSA$GDI[3])
 
 
 # ===============
