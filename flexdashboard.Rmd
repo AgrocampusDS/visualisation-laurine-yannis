@@ -391,8 +391,8 @@ par(mfrow = c(2,2), omi=c(0,0.25,0,0.25),oma = c(0,0,2,0),mar = c(2,0,1,0))
 # =======
 # South Africa
 
-colRSA = c("#a3d15f")
-areaRSA = rgb(163, 209, 95, alpha = 120, maxColorValue = 255 )
+colRSA = c("#EC6E45")
+areaRSA = rgb(236, 110, 69, alpha = 120, maxColorValue = 255 )
 
 radarchart(dta.g3.RSA[-4], 
            # -- GRID --
@@ -420,8 +420,8 @@ text(1.4,0.4, paste("GDI :", dta.g3.RSA[3,4]), cex = 1, family = "sans", font = 
 # =======
 # Morocco
 
-colMOR = c("#a3d15f")
-areaMOR = rgb(163, 209, 95, alpha = 120, maxColorValue = 255 )
+colMOR = c("#EC6E45")
+areaMOR = rgb(236, 110, 69, alpha = 120, maxColorValue = 255 )
 
 radarchart(dta.g3.MOR[-4], 
            # -- GRID --
